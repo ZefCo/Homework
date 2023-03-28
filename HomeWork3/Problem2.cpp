@@ -52,13 +52,13 @@ void ZeroWell::potential_points() {
 }
 
 
-std::tuple<double, double> ZeroWell::func(double psi, double phi, double x, double e) {
+std::tuple<double, double> ZeroWell::func(double psi, double phi, double x, double E) {
 
     double fpsi, fphi;
 
     fpsi = phi;
 
-    fphi = (2 * me / (hbar*hbar)) * (V(x, a) - e) * psi;
+    fphi = (2 * me / (hbar*hbar)) * (V(x, a) - E) * psi;
 
     return {fpsi, fphi};
 }
