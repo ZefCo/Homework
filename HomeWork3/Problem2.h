@@ -1,3 +1,4 @@
+#include <cmath>
 #include <vector>
 #include <array>
 #include <filesystem>
@@ -9,10 +10,9 @@
 namespace fs = std::filesystem;
 
 const double hbar = 1.0546E-34;  // hbar
-const double me = 9.109E-32;     // mass of electron
+const double me = 9.109E-31;     // mass of electron
 const double e = 1.6022E-19;     // electron charge
 const double a = 10E-11;         // Bohr radius (order of magnitude)
-
 
 
 
@@ -24,7 +24,7 @@ class ZeroWell {
         ~ZeroWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> eigen_energy(double e);
+        std::tuple<double, double> wavefunction(double e);
 
         // it may seem silly but this has the same form as the other two so I can test the rest of the code
         // and be lazy at the same time: don't have to alter the inputs to the function.
@@ -32,7 +32,7 @@ class ZeroWell {
         // in C++ to do that
         double V(double x, double a);
 
-        std::tuple<double, double> shoot(double psi, double phi, double x, double E);
+        std::tuple<double, double> func(double psi, double phi, double x, double E);
 
         void secant_ODE(double target);
 
@@ -75,12 +75,12 @@ class HarmonicWell {
         ~HarmonicWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> eigen_energy(double e);
+        std::tuple<double, double> wavefunction(double e);
 
         // A potential of V(x) = V0 x**2 / a**2
         double V(double x, double a);
 
-        std::tuple<double, double> shoot(double psi, double phi, double x, double E);
+        std::tuple<double, double> func(double psi, double phi, double x, double E);
 
         void secant_ODE(double target);
 
@@ -124,12 +124,12 @@ class AnharmonicWell {
         ~AnharmonicWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> eigen_energy(double e);
+        std::tuple<double, double> wavefunction(double e);
 
         // A potential of V(x) = V0 x**4 / a**4
         double V(double x, double a);
 
-        std::tuple<double, double> shoot(double psi, double phi, double x, double E);
+        std::tuple<double, double> func(double psi, double phi, double x, double E);
 
         void secant_ODE(double target);
 

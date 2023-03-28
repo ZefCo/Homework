@@ -13,15 +13,9 @@
 
 namespace fs = std::filesystem;
 
-// Imported in Problem 2
-// const double hbar = 1.0546E-34;  // hbar
-// const double me = 9.109E-32;     // mass of electron
-// const double e = 1.6022E-19;     // electron charge
-// const double a = 10E-11;         // Bohr radius (order of magnitude)
-
 
 void problem1() {
-    double s = 10, r = 28, b = 8/3, h = 0.01;
+    const double s = 10, r = 28, b = 8/3, h = 0.01;
     double tfinal = 50;
     double x0 = 0, y0 = 1, z0 = 0, t0 = 0;
 
@@ -39,31 +33,44 @@ void problem1() {
 
     lorenz_y.write_csv(outfile1a);
 
+    std::cout << "Problem 1 printed to csv: use HW3_plots.ipynb for graphs" << std::endl << std::endl;
+
 }
 
 
 void problem2() {
     double v0, L, N, h;
 
+    std::cout << "Problem 2" << std::endl;
+
     v0 = (50)*e;         // puts V0 into eV
-    L = 10*a - (-10*a);  // size of the well
     N = 1000;            // number of points in the well
     h = L / N;           // step size of the well
-
-    // std::vector<double> ppoints = potential_points(-10*a, 10*a, h);
-
-
-    // std::cout << "L = " << L << " N = " << N << " a = " << a << " h = " << h << std::endl;
-
-    // std::cout << "Size of ppoints = " << ppoints.size() << std::endl;
-    // std::cout << "First three points of ppoint:\n" << ppoints[0] << ", " << ppoints[1] << ", " << ppoints[2] << std::endl;
-    // std::cout << "Last three points of ppoint:\n" << ppoints[ppoints.size() - 3] << ", " << ppoints[ppoints.size() - 2] << ", " << ppoints[ppoints.size() - 1] << std::endl;
+    // other constants defined in Problem2.h file
     
-    ZeroWell test(v0, -10*a, 10*a, N, 0, e);
+    // ZeroWell test(v0, 0, 5.2918E-11, N, 0, e);
+    // test.secant_ODE(e/1000);
+    // std::cout << " E/e = " << test.get_E2()/e << "ev" << std::endl;
 
-    test.secant_ODE(e/1000);
+    std::cout << "Part a)" << std::endl;
 
-    std::cout << "Part a E2 = " << test.get_E2() / e << std::endl;
+    HarmonicWell parta_g(v0, -10*a, 10*a, N, 0, e);
+    parta_g.secant_ODE(e/1000.0);
+    std::cout << "E g state = " << parta_g.get_E2() / e << " ev" << std::endl;
+
+    HarmonicWell parta_1(v0, -10*a, 10*a, N, 2.0*e, 600*e);
+    parta_1.secant_ODE(e/1000.0);
+    std::cout << "E 1 state = " << parta_1.get_E2() / e << " ev" << std::endl;
+
+    HarmonicWell parta_2(v0, -10*a, 10*a, N, 601*e, 1300*e);
+    parta_2.secant_ODE(e/1000.0);
+    std::cout << "E 2 state = " << parta_2.get_E2() / e << " ev" << std::endl;
+
+
+}
+
+
+void problem3() {
 
 }
 
