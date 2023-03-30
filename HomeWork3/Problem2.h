@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 const double hbar = 1.0546E-34;  // hbar
 const double me = 9.109E-31;     // mass of electron
 const double Q = 1.6022E-19;     // electron charge
-const double a = 10E-11;         // Bohr radius (order of magnitude)
+const double a = 1E-11;         // Bohr radius (order of magnitude)
 
 
 
@@ -39,16 +39,12 @@ class ZeroWell {
         double get_E2();
 
         std::vector<double> norm_psi;
-        std::vector<double> unno_psi;
 
         // Normazlies via simpson's method. Also uses only half the wavefunction because of artifacts with the shooting method.
-        void normalize();
+        void normalize(std::vector<double> inpsi);
 
         // writes the wave function to a csv file
         void write_function(fs::path outfile);
-
-
-
 
     private:
         // V0 of the potential
@@ -84,7 +80,7 @@ class HarmonicWell {
         ~HarmonicWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> wavefunction(double e);
+        std::vector<double> wavefunction(double e);
 
         // A potential of V(x) = V0 x**2 / a**2
         double V(double x, double a);
@@ -95,8 +91,13 @@ class HarmonicWell {
 
         double get_E2();
 
+        std::vector<double> norm_psi;
 
+        // Normazlies via simpson's method. Also uses only half the wavefunction because of artifacts with the shooting method.
+        void normalize(std::vector<double> inpsi);
 
+        // writes the wave function to a csv file
+        void write_function(fs::path outfile);
 
     private:
         // V0 of the potential
@@ -133,7 +134,7 @@ class AnharmonicWell {
         ~AnharmonicWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> wavefunction(double e);
+        std::vector<double> wavefunction(double e);
 
         // A potential of V(x) = V0 x**4 / a**4
         double V(double x, double a);
@@ -144,8 +145,13 @@ class AnharmonicWell {
 
         double get_E2();
 
+        std::vector<double> norm_psi;
 
+        // Normazlies via simpson's method. Also uses only half the wavefunction because of artifacts with the shooting method.
+        void normalize(std::vector<double> inpsi);
 
+        // writes the wave function to a csv file
+        void write_function(fs::path outfile);
 
     private:
         // V0 of the potential

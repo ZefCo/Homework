@@ -41,39 +41,72 @@ void problem1() {
 void problem2() {
     double v0, L, N, h;
 
-    std::cout << "Problem 2" << std::endl;
+    std::cout << "\nProblem 2\n" << std::endl;
 
     v0 = (50)*Q;         // puts V0 into eV
     N = 1000;            // number of points in the well
     h = L / N;           // step size of the well
     // other constants defined in Problem2.h file
 
-    fs::path testout = fs::current_path() / "TestWave.csv";
+    // fs::path testout = fs::current_path() / "TestWave.csv";
     
-    ZeroWell test(v0, 0, 5.2918E-11, N, 0, Q);
-    test.secant_ODE(Q/1000);
-    double test_e = test.get_E2() / Q;
-    std::cout << " E/e = " << test_e << "ev" << std::endl;
+    // ZeroWell test(v0, 0, 5.2918*a, N, 0, Q);
+    // test.secant_ODE(Q/1000);
+    // double test_e = test.get_E2() / Q;
+    // std::cout << " E/e = " << test_e << "ev" << std::endl;
     // test.write_function(testout);
 
 
-    // std::cout << "Part a)" << std::endl;
-    // HarmonicWell partb_g(v0, -10*a, 10*a, N, 0, e);
-    // partb_g.secant_ODE(e/1000.0);
-    // double partb_ge = partb_g.get_E2() / e;
-    // std::cout << "E g state = " << partb_ge << " ev" << std::endl;
+    std::cout << "Harmonic Oscillator" << std::endl;
+    HarmonicWell harmg(v0, -10*a, 10*a, N, 0.0, Q);
+    harmg.secant_ODE(Q/1000.0);
+    double harmg_e = harmg.get_E2() / Q;
+    std::cout << "E g state = " << harmg_e << " ev" << std::endl;
+    harmg.write_function(fs::current_path() / "Harmonic_Ground.csv");
 
-    // HarmonicWell partb_1(v0, -10*a, 10*a, N, partb_ge*e, 3*partb_ge*e);
-    // partb_1.secant_ODE(e/1000.0);
-    // double partb_1e = partb_1.get_E2() / e;
-    // std::cout << "E 1 state = " << partb_1e << " ev" << std::endl;
+    std::cout << std::endl;
 
-    // HarmonicWell partb_2(v0, -10*a, 10*a, N, 4*partb_ge*e, 7*partb_ge*e);
-    // partb_2.secant_ODE(e/1000.0);
-    // double partb_2e = partb_2.get_E2() / e;
-    // std::cout << "E 2 state = " << partb_2e << " ev" << std::endl;
+    HarmonicWell harm1(v0, -10*a, 10*a, N, harmg_e*Q, 3*harmg_e*Q);
+    harm1.secant_ODE(Q/1000.0);
+    double harm1_e = harm1.get_E2() / Q;
+    std::cout << "E 1 state = " << harm1_e << " ev" << std::endl;
+    harm1.write_function(fs::current_path() / "Harmonic_First.csv");
 
+    std::cout << std::endl;
 
+    HarmonicWell harm2(v0, -10*a, 10*a, N, 4*harmg_e*Q, 7*harmg_e*Q);
+    harm2.secant_ODE(Q/1000.0);
+    double harm2_e = harm2.get_E2() / Q;
+    std::cout << "E 2 state = " << harm2_e << " ev" << std::endl;
+    harm2.write_function(fs::current_path() / "Harmonic_Second.csv");
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Anharmonic Oscillator" << std::endl;
+    AnharmonicWell anharmg(v0, -10*a, 10*a, N, 0.0, Q);
+    anharmg.secant_ODE(Q/1000.0);
+    double anharmg_e = anharmg.get_E2() / Q;
+    std::cout << "E g state = " << anharmg_e << " ev" << std::endl;
+    anharmg.write_function(fs::current_path() / "Anharmonic_Ground.csv");
+
+    std::cout << std::endl;
+
+    AnharmonicWell anharm1(v0, -10*a, 10*a, N, 400*Q, 600*Q);
+    anharm1.secant_ODE(Q/1000.0);
+    double anharm1_e = anharm1.get_E2() / Q;
+    std::cout << "E 1 state = " << anharm1_e << " ev" << std::endl;
+    anharm1.write_function(fs::current_path() / "Anharmonic_First.csv");
+
+    std::cout << std::endl;
+
+    AnharmonicWell anhamr2(v0, -10*a, 10*a, N, 600*Q, 1000*Q);
+    anhamr2.secant_ODE(Q/1000.0);
+    double anhamr2_e = anhamr2.get_E2() / Q;
+    std::cout << "E 2 state = " << anhamr2_e << " ev" << std::endl;
+    anhamr2.write_function(fs::current_path() / "Anharmonic_Second.csv");
+
+    std::cout << std::endl;
 }
 
 
