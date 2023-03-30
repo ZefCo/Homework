@@ -279,7 +279,7 @@ void HarmonicWell::normalize(std::vector<double> inpsi) {
         psipsi.push_back(inpsi[i] * inpsi[i]);
     }
 
-    s = psipsi[0] + psipsi[n];
+    s = psipsi[0] + psipsi[n - 1];
 
     for (int i = 1; i < n/2; i++) {
         s += 4 * psipsi[2*i - 1];
@@ -447,7 +447,7 @@ void AnharmonicWell::normalize(std::vector<double> inpsi) {
         psipsi.push_back(inpsi[i] * inpsi[i]);
     }
 
-    s = psipsi[0] + psipsi[n];
+    s = psipsi[0] + psipsi[n - 1];
 
     for (int i = 1; i < n/2; i++) {
         s += 4 * psipsi[2*i - 1];

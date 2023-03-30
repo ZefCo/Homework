@@ -16,6 +16,9 @@ const double a = 1E-11;         // Bohr radius (order of magnitude)
 
 
 
+// This one is here for testing: if I could duplicate what was in the book then I was on the right track
+// Ideally I would make one class that takes a function as one of it's inputs but that made things to complicated.
+// It's much easier to do in Python
 class ZeroWell {
     public:
         // constructor
