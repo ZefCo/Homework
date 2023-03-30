@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 
 const double hbar = 1.0546E-34;  // hbar
 const double me = 9.109E-31;     // mass of electron
-const double e = 1.6022E-19;     // electron charge
+const double Q = 1.6022E-19;     // electron charge
 const double a = 10E-11;         // Bohr radius (order of magnitude)
 
 
@@ -24,7 +24,7 @@ class ZeroWell {
         ~ZeroWell();
 
         // uses RK4 to find the boundary values
-        std::tuple<double, double> wavefunction(double e);
+        std::vector<double> wavefunction(double e);
 
         // it may seem silly but this has the same form as the other two so I can test the rest of the code
         // and be lazy at the same time: don't have to alter the inputs to the function.
@@ -37,6 +37,15 @@ class ZeroWell {
         void secant_ODE(double target);
 
         double get_E2();
+
+        std::vector<double> norm_psi;
+        std::vector<double> unno_psi;
+
+        // Normazlies via simpson's method. Also uses only half the wavefunction because of artifacts with the shooting method.
+        void normalize();
+
+        // writes the wave function to a csv file
+        void write_function(fs::path outfile);
 
 
 

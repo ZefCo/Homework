@@ -43,31 +43,35 @@ void problem2() {
 
     std::cout << "Problem 2" << std::endl;
 
-    v0 = (50)*e;         // puts V0 into eV
+    v0 = (50)*Q;         // puts V0 into eV
     N = 1000;            // number of points in the well
     h = L / N;           // step size of the well
     // other constants defined in Problem2.h file
+
+    fs::path testout = fs::current_path() / "TestWave.csv";
     
-    ZeroWell test(v0, 0, 5.2918E-11, N, 0, e);
-    test.secant_ODE(e/1000);
-    std::cout << " E/e = " << test.get_E2()/e << "ev" << std::endl;
+    ZeroWell test(v0, 0, 5.2918E-11, N, 0, Q);
+    test.secant_ODE(Q/1000);
+    double test_e = test.get_E2() / Q;
+    std::cout << " E/e = " << test_e << "ev" << std::endl;
+    // test.write_function(testout);
 
 
-    std::cout << "Part a)" << std::endl;
-    HarmonicWell partb_g(v0, -10*a, 10*a, N, 0, e);
-    partb_g.secant_ODE(e/1000.0);
-    double partb_ge = partb_g.get_E2() / e;
-    std::cout << "E g state = " << partb_ge << " ev" << std::endl;
+    // std::cout << "Part a)" << std::endl;
+    // HarmonicWell partb_g(v0, -10*a, 10*a, N, 0, e);
+    // partb_g.secant_ODE(e/1000.0);
+    // double partb_ge = partb_g.get_E2() / e;
+    // std::cout << "E g state = " << partb_ge << " ev" << std::endl;
 
-    HarmonicWell partb_1(v0, -10*a, 10*a, N, partb_ge*e, 3*partb_ge*e);
-    partb_1.secant_ODE(e/1000.0);
-    double partb_1e = partb_1.get_E2() / e;
-    std::cout << "E 1 state = " << partb_1e << " ev" << std::endl;
+    // HarmonicWell partb_1(v0, -10*a, 10*a, N, partb_ge*e, 3*partb_ge*e);
+    // partb_1.secant_ODE(e/1000.0);
+    // double partb_1e = partb_1.get_E2() / e;
+    // std::cout << "E 1 state = " << partb_1e << " ev" << std::endl;
 
-    HarmonicWell partb_2(v0, -10*a, 10*a, N, 4*partb_ge*e, 7*partb_ge*e);
-    partb_2.secant_ODE(e/1000.0);
-    double partb_2e = partb_2.get_E2() / e;
-    std::cout << "E 2 state = " << partb_2e << " ev" << std::endl;
+    // HarmonicWell partb_2(v0, -10*a, 10*a, N, 4*partb_ge*e, 7*partb_ge*e);
+    // partb_2.secant_ODE(e/1000.0);
+    // double partb_2e = partb_2.get_E2() / e;
+    // std::cout << "E 2 state = " << partb_2e << " ev" << std::endl;
 
 
 }
