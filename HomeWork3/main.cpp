@@ -19,11 +19,11 @@ void problem1() {
     double tfinal = 50;
     double x0 = 0, y0 = 1, z0 = 0, t0 = 0;
 
-    std::cout << "Problem 1" << std::endl;
+    std::cout << "Problem 1\n" << std::endl;
 
     fs::path outfile1a = fs::current_path() / "Lorenz_Problem_1a.csv";
 
-    std::cout << "Values for Problem 1 a)" << std::endl;
+    std::cout << "Initial Values & constants" << std::endl;
     std::cout << "x0 = " << x0 << " y0 = " << y0 << " z0 = " << z0 << std::endl;
     std::cout << "s = " << s << " r = " << r << " b = " << b << std::endl;
     std::cout << "t0 = " << t0 << " t final = " << tfinal << " t size = " << h << std::endl;
@@ -33,7 +33,7 @@ void problem1() {
 
     lorenz_y.write_csv(outfile1a);
 
-    std::cout << "Problem 1 printed to csv: use HW3_plots.ipynb for graphs" << std::endl << std::endl;
+    // std::cout << "Problem 1 printed to csv: use HW3_plots.ipynb for graphs" << std::endl << std::endl;
 
 }
 
@@ -111,16 +111,46 @@ void problem2() {
 
 
 void problem3() {
+    std::vector<std::vector<double>> A, A_prime;
+    std::vector<double> v, voltages;
+
+    std::cout << "Problem 3\n" << std::endl;
+
+    std::cout << "N = 6 resistors" << std::endl;
+    std::tie(A, v) = init_resistors(6, 5.0);
+
+    A_prime = A2A(A);
+
+    voltages = banded_matrix(A_prime, v, 2, 2);
+
+    for (int i = 0; i < voltages.size(); i++) {
+        std::cout << "V" << i + 1 << " = " << voltages[i] << std::endl;
+    }
+
+    std::cout << "Because of the unfesability of outputing 10,000 voltages to the console those will be output to a seperate .csv file" << std::endl;
+
+    std::cout << "N = 10,000 resistors" << std::endl;
+    std::tie(A, v) = init_resistors(10000, 5.0);
+
+    A_prime = A2A(A);
+
+    voltages = banded_matrix(A_prime, v, 2, 2);
+    write_voltages(fs::current_path() / "10000_Voltages.csv", voltages);
+
 
 }
 
 
 int main() {
+    std::cout << "Ethan Speakman HW3\n please note that the contents of the C++ file are output to .csv\nGraphs are made in the .ipynb file using Python" << std::endl << std::endl;
     // std::cout << "hbar = " << hbar << std::endl;
 
-    std::cout << "Problem 1 turned off right now" << std::endl;
-    // problem1();
+    // std::cout << "Problem 1 turned off right now" << std::endl;
+    problem1();
+    // std::cout << "Problem 2 turned off right now" << std::endl;
     problem2();
+    // std::cout << "Doing problem 3" << std::endl;
+    problem3();
 
 
 }
