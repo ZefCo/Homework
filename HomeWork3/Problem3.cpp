@@ -105,9 +105,9 @@ std::vector<std::vector<double>> A2A(std::vector<std::vector<double>> inA) {
     
     // iterate across first row
     for (int c = N; c > -1; c--) {
-        if (inA[0][c] != 0) {
-            std::vector<double> dummy;
-
+        if (abs(inA[0][c]) > 0) {       // note the abs(). Originally I used x != 0, but somehow, when checking this on other computers, it would find none zero
+            std::vector<double> dummy;  // values where it should be zero, meaning it created a false diagnol row. Switching to abs(x) > 0 seems to have cleared
+                                        // things up. I could have used and even wider tolerance because all the original coefficents are >= 1.
             for (int i = 0; i < N - c; i++) {
                 dummy.push_back(inA[i + c][i]);
             }
@@ -126,7 +126,7 @@ std::vector<std::vector<double>> A2A(std::vector<std::vector<double>> inA) {
     // iterate across first column
     // starting at 1 because the above ends at 0
     for (int r = 1; r < N; r++) {
-        if (inA[r][0] != 0) {
+        if (abs(inA[r][0]) > 0) {
             std::vector<double> dummy;
 
             for (int i = 0; i < N - r; i++) {
