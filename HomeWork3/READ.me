@@ -1,0 +1,22 @@
+The actual code is across 7 C++ files:
+
+main.cpp is the main file that executes the code.
+Each problem has it's own .cpp and .h file that organizes the #include, declarations, and actual code.
+The output for the plots is into .csv files.
+
+The jupyter notbook file HW3_plots.ipynb reads the data from these .csv files and turns them into plot.
+
+There is also an additonal ResistorMatrixProof.pdf that shows the proof for Problem 3 of how the matrix is formed
+from the current junction rule. It was easier to do it by hand then to include that in Latex or jupyter notebook.
+The .csv files I used to make the plots are also there, but they can be removed/overwritten as the C++ code will output
+new data.
+
+The g++ compiler line I used for Windows and Linux are:
+
+Windows:
+g++ main.cpp Problem1.cpp Problem2.cpp Problem3.cpp -o HW3.exe
+
+Linux:
+g++ main.cpp Problem1.cpp Problem2.cpp Problem3.cpp -o HW3.out
+
+These are also in the main.cpp file as well.
