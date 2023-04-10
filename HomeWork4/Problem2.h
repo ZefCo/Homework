@@ -97,10 +97,12 @@ class IsingLattice {
 
 
 
-// // Taken from Numerical Recipies. Adjusted so I don't have to import every single NR header file.
-// double ran2(int &idum);
+// Iterates from N = 10 to N = 1000 to find a decent value for N. Will generate a number of seeds and average across those seeds to find <|m|>.
+// Once it finds one within a certain trehshold it stops the loop (so you don't have to sit threw 990 iterations)
+void finding_N(double T, double J, double h, double thresh, int runs);
 
 
-// // Generate random int: by default this is from [0, 1]
-// // Note it actually generates a number between [0, 2) so when being used it should thought of as [min, max + 1)
-// int random_int(int min, int max, int seed);
+// Does the same thing as finding_N but only for one value of N. Good for vaildating the value you found. 
+// Because of the nature of the PRNG you may need to run it once or twice: using N = 75 I had a percent diff from the analytic solution of 9, 5, and 1%
+// with 5 runs <2% with 10 runs. More runs is better, but longer.
+void validate_N(int N, double T, double J, double h, int runs);

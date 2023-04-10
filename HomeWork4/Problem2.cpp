@@ -2,34 +2,12 @@
 
 
 IsingLattice::IsingLattice(int N, double T, double J, double h, int seed): N(N), T(T), J(J), h(h), seed(seed) {
-	// std::cout << "Initalizing Lattice for lattice\n\tN =  " << N << " T = " << T << " J = " << J << " h = " << h << std::endl << std::endl;
 	init_lattice();
-	// print_values();
-	// print_lattice();
-
-    // double temp = IsingLattice::T;
-
-	// IsingLattice::T = 10;
-	// // std::cout << "Warming up Lattice with T = " << IsingLattice::T << std::endl;
-
-	// for (int t = T; t >= temp; t--){
-	// 	init_holtzman();
-	// 	init_joltzman();
-	// 	// print_lattice();
-	// }
-	// IsingLattice::T = temp;
-	// // std::cout << "Finished Warming up Lattice" << std::endl;
-	// // std::cout << "Lattice size = " << N << "\nTemp = " << IsingLattice::T << "\nJ = " << J << " h = " << h << std::endl;
-
 	analytic();
-	// std::cout << "Analytic Solution = " << get_analytic() << std::endl;
 	init_holtzman();
     init_joltzman();
-	// print_energies();
 
 	for (int s = 0; s < 10000; s++) {sweep();}
-	// print_values();
-	// print_lattice();
 
 };
 
@@ -56,15 +34,10 @@ void IsingLattice::init_joltzman() {
 void IsingLattice::sweep() {
 	for (int n = 0; n < N; n++) {
 		int spin_index = random_int(0, N, seed = seed);
-		// std::cout << "\tspin index = " << spin_index << "/" << N << " initial spin = " << lattice[spin_index] << std::endl;
 		int spin = delta_energy(spin_index);
-		// std::cout << "\tspin key = " << spin << std::endl;
 		double e = get_boltzman(spin, spin_index);
-		// std::cout << "\tEnergy Probability = " << e << " spin index = " << spin_index << "/" << N << std::endl;
 		int flip = Metropolis(e);
-		// std::cout << "\tflip = " << flip << " spin index = " << spin_index << "/" << N << std::endl;
 		flip_spin(flip, spin_index);
-		// std::cout << "\tflip = " << flip << " spin index = " << spin_index << "/" << n << " final spin = " << lattice[spin_index] << std::endl << std::endl;
 	}
 }
 
@@ -86,10 +59,7 @@ int IsingLattice::delta_energy(int spin) {
 double IsingLattice::get_boltzman(int energy, int spin_index) {
 	double delta_e;
 
-	// std::cout << "\t\tKeys = " << 2*energy << " " << lattice[spin_index] << std::endl;
-
 	delta_e = joltzman[2*energy] * holtzman[lattice[spin_index]];
-	// std::cout << "\t\t" << joltzman[2*energy] << " " << holtzman[lattice[spin_index]] << std::endl;
 	
 	return delta_e;
 
@@ -99,13 +69,11 @@ double IsingLattice::get_boltzman(int energy, int spin_index) {
 
 void IsingLattice::flip_spin(int flip, int spin) {
 	if (flip < 0) {
-		// std::cout << "\t\tMove Accepted" << std::endl;
 		lattice[spin] = lattice[spin] * flip;
 		Mag += 2*lattice[spin];
 		mag = Mag / (double)N;
 	}
 	
-	// std::cout << "\t\t M = " << Mag << " mag = " << mag << std::endl;
 }
 
 
@@ -114,7 +82,6 @@ int IsingLattice::Metropolis(float delta_e)
 {
 	int flip;
     float roll = ran2(seed);
-	// std::cout << "\t\t r value = " << roll << std::endl;
     if (roll <= delta_e) {flip = -1;}
 	else {flip = 1;}
 
@@ -197,3 +164,85 @@ void IsingLattice::print_energies() {
 
 
 
+void finding_N(double T, double J, double h, double thresh, int runs) {
+
+	// seraching for N
+    for (int n = 10; n < 100; n++) {
+        std::vector<double> m_ave_vec;
+        double can_m, pd, analytic;
+        
+		std::cout << "#### N = " << n << " with " << runs << " seperate seeds" << std::endl;
+        for (int r = 0; r < runs; r++) {
+            std::vector<double> m_vec, M_vec;
+            int seed = gen_seed();
+            // int seed = -20170520;
+            double ave_m;
+            double M, m;
+            int measures = 10;  // OK yes I should do an autocorrelation and other things but... that's a lot of work
+
+            IsingLattice oneD(n, T, J, h, seed);
+
+            for (int i = 0; i < measures; i++){
+                double M, m;
+                for (int s = 0; s < 100000; s++) {oneD.sweep();}
+                std::tie(M, m) = oneD.get_Mag();
+                // std::cout << "M = " << M << " m = " << m << std::endl;
+                m_vec.push_back(m); M_vec.push_back(M); 
+                // std::cout << "\t|m| = " << abs(m) << std::endl;
+            }
+
+            ave_m = ensemble(m_vec);
+            m_ave_vec.push_back(ave_m);
+            analytic = oneD.get_analytic();
+        }
+
+        can_m = ensemble(m_ave_vec);
+
+        pd = percent_diff(can_m, analytic);
+
+        std::cout << "< |m| > = " << can_m << " target = " << analytic << " diff = " << pd << " N = " << n << std::endl;
+        // std::cout << "Length of m_vec = " << m_vec.size() << std::endl;
+        if (pd <= thresh) {break;}
+
+    }
+
+}
+
+
+
+void validate_N(int N, double T, double J, double h, int runs) {
+    std::vector<double> m_ave_vec;
+    double can_m, pd, analytic;
+
+    std::cout << "#### N = " << N << " with " << runs << " seperate seeds" << std::endl;
+
+    for (int r = 0; r < runs; r++) {
+        std::vector<double> m_vec, M_vec;
+        int seed = gen_seed();
+        double ave_m;
+        double M, m;
+        int measures = 10;  // OK yes I should do an autocorrelation and other things but... that's a lot of work
+
+        IsingLattice oneD(N, T, J, h, seed);
+
+        for (int i = 0; i < measures; i++){
+            double M, m;
+            for (int s = 0; s < 100000; s++) {oneD.sweep();}
+            std::tie(M, m) = oneD.get_Mag();
+            // std::cout << "M = " << M << " m = " << m << std::endl;
+            m_vec.push_back(m); M_vec.push_back(M); 
+            // std::cout << "\t|m| = " << abs(m) << std::endl;
+        }
+
+        ave_m = ensemble(m_vec);
+        m_ave_vec.push_back(ave_m);
+        analytic = oneD.get_analytic();
+    }
+
+    can_m = ensemble(m_ave_vec);
+
+    pd = percent_diff(can_m, analytic);
+
+    std::cout << "< |m| > = " << can_m << " target = " << analytic << " diff = " << pd << " N = " << N << std::endl;
+
+}
