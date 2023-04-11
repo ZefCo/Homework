@@ -21,5 +21,5 @@ int seed_portion(int OoM);
 // Generates a seed to put into ran2. I don't care what the seed is so I just pull from the system clock
 int gen_seed();
 
-// Finds the average of a vector.
+// Finds the average of a vector. This isn't used anymore.
 double ensemble(std::vector<double> a);

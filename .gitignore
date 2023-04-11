@@ -3,3 +3,6 @@
 *.exe
 *.out
 *.zip
+/TempFolder
+/Temp_Folder
+*.gif
