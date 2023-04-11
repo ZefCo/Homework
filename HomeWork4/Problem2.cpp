@@ -7,7 +7,7 @@ IsingLattice::IsingLattice(int N, double T, double J, double h, int seed): N(N),
 	init_holtzman();
     init_joltzman();
 
-	for (int s = 0; s < 10000; s++) {sweep();}
+	// for (int s = 0; s < 10000; s++) {sweep();}
 
 };
 
@@ -244,5 +244,101 @@ void validate_N(int N, double T, double J, double h, int runs) {
     pd = percent_diff(can_m, analytic);
 
     std::cout << "< |m| > = " << can_m << " target = " << analytic << " diff = " << pd << " N = " << N << std::endl;
+
+}
+
+
+// comes out to ~ 390 = N
+void finding_N_better(double T, double J, double h, int min_N, int max_N, int increment) {
+    std::vector<std::vector<double>> m_data;
+    int i = 0;
+    std::vector<std::string> headers;
+
+    m_data.resize((max_N - min_N) / increment);
+    headers.resize((max_N - min_N) / increment);
+    
+    for (int n = min_N; n < max_N; n += increment) {
+		std::cout << "#### Run " << i + 1 << " N = " << n << std::endl;
+        headers[i] = "N_" + std::to_string(n);
+        
+        std::vector<double> m_vec;
+
+        int seed = gen_seed();
+        IsingLattice oneD(n, T, J, h, seed);
+        double M, m;
+
+        for (int i = 0; i < 10000; i++){
+            oneD.sweep();
+            std::tie(M, m) = oneD.get_Mag();
+            m_vec.push_back(m); 
+        }
+
+        m_data[i] = m_vec; i += 1;
+    }
+
+    write_problem2(fs::current_path() / "MagData_N.csv", m_data, headers);
+
+
+}
+
+
+
+void write_problem2(fs::path outfile, std::vector<std::vector<double>> m, std::vector<std::string> headers) {
+
+    std::cout << "Writing to file:\n" << outfile << std::endl;
+    // std::cout << "tmax = " << tmax << std::endl;
+    std::ofstream fileout(outfile);
+    int cols = headers.size();
+
+    fileout << "t";
+    for (int c = 0; c < cols; c++) {fileout << "," << headers[c];}
+    fileout << "\n";
+
+    for (int t = 0; t < m[0].size(); t++) {
+        fileout << t;
+    
+        for (int c = 0; c < cols; c++) {
+            fileout << "," << m[c][t];
+        }
+    
+        fileout << "\n";
+    }
+
+    fileout.close();
+    std::cout << "Finished writing to\n" << outfile << std::endl; 
+
+}
+
+
+
+void h_values(int N, double T, double J, double min_h, double max_h, double increment) {
+    std::vector<std::vector<double>> m_data;
+    int i = 0;
+    std::vector<std::string> headers;
+    int vsize = (int)((max_h - min_h) / increment);
+    m_data.resize(vsize);
+    headers.resize(vsize);
+
+    for (double h = min_h; h < max_h; h += increment) {
+        if (abs(h) < 0.01) {h = 0;}
+    
+		std::cout << "#### Run " << i + 1 << " h = " << h << std::endl;
+        headers[i] = "h_" + std::to_string(h);
+
+        std::vector<double> m_vec;
+
+        int seed = gen_seed();
+        IsingLattice oneD(N, T, J, h, seed);
+        double M, m;
+
+        for (int i = 0; i < 10000; i++){
+            oneD.sweep();
+            std::tie(M, m) = oneD.get_Mag();
+            m_vec.push_back(m); 
+        }
+        m_data[i] = m_vec; i += 1;
+    }
+
+    write_problem2(fs::current_path() / "MagData_h.csv", m_data, headers);
 
 }

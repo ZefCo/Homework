@@ -4,7 +4,12 @@
 #include <tuple>
 #include <math.h>
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 #include "Other.h"
+
+namespace fs = std::filesystem;
+
 
 
 class IsingLattice {
@@ -40,10 +45,9 @@ class IsingLattice {
         std::tuple<double, double> get_Mag();
 
 
+        // Used these when I was debugging
         void print_lattice();
-
         void print_values();
-
         void print_energies();
 
     private:
@@ -106,3 +110,18 @@ void finding_N(double T, double J, double h, double thresh, int runs);
 // Because of the nature of the PRNG you may need to run it once or twice: using N = 75 I had a percent diff from the analytic solution of 9, 5, and 1%
 // with 5 runs <2% with 10 runs. More runs is better, but longer.
 void validate_N(int N, double T, double J, double h, int runs);
+
+
+
+// Forget finding N, I was doing in a convoluted way. Just doing a bunch of sweeps for several N and ploting.
+// Has one issue I'm not going to bother fixing: you can iterate outside of Max N which will cause it to crash. Think about it:
+// if you choose a increment value that goes beyond Max N (like min = 10, max = 50, increment = 25), it crashes. 
+// But since those values are hard coded to the main I'm not going to worry about. Maybe sometime in the future.
+void finding_N_better(double T, double J, double h, int min_N, int max_N, int increment);
+
+// Writes the Data out to a csv file. Used in both the finding_N_Better and h_values script
+void write_problem2(fs::path outfile, std::vector<std::vector<double>> m, std::vector<std::string> header);
+
+
+// Varries the h parameter, but takes in a T, J, N. Has the same issue that finding_N_better does
+void h_values(int N, double T, double J, double min_h, double max_h, double increment);
