@@ -254,10 +254,10 @@ void finding_N_better(double T, double J, double h, int min_N, int max_N, int in
     int i = 0;
     std::vector<std::string> headers;
 
-    m_data.resize((max_N - min_N) / increment);
-    headers.resize((max_N - min_N) / increment);
+    m_data.resize(((max_N - min_N) / increment) + 1);
+    headers.resize(((max_N - min_N) / increment) + 1);
     
-    for (int n = min_N; n < max_N; n += increment) {
+    for (int n = min_N; n < max_N + increment; n += increment) {
 		std::cout << "#### Run " << i + 1 << " N = " << n << std::endl;
         headers[i] = "N_" + std::to_string(n);
         
