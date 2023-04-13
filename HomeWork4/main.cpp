@@ -40,7 +40,7 @@ void Problem2() {
 
     int min_N = 500;
     int max_N = 2000;
-    int N_step = 25;
+    int N_step = 50;
 
     int N = 2000;
     double h_min = -0.5;
