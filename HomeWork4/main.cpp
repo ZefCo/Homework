@@ -4,9 +4,10 @@
 #include "Problem1.h"
 #include "Problem2.h"
 
-
-// g++ main.cpp Problem2.cpp Other.cpp -o SpeakmanHW4.exe
-// g++ main.cpp Problem2.cpp Other.cpp -o SpeakmanHW4.out
+// Windows
+// g++ main.cpp Problem1.cpp Problem2.cpp Other.cpp -o SpeakmanHW4.exe
+// Linux
+// g++ main.cpp Problem1.cpp Problem2.cpp Other.cpp -o SpeakmanHW4.out
 
 
 void Problem1() {
@@ -39,21 +40,22 @@ void Problem2() {
     double h0 = 0.1;
 
     int min_N = 500;
-    int max_N = 2000;
-    int N_step = 50;
+    int max_N = 5000;
+    int N_step = 100;
 
-    int N = 2000;
     double h_min = -0.5;
     double h_max = 0.5;
     double h_step = 0.1;
-    int seperate_seeds = 10;
+    int N = 5000;
+    
     
     std::cout << std::endl;
     std::cout << "Problem 2\n1D Ising Model Simulation\n" << std::endl;
     std::cout << "T = " << T << " J = " << J << " h = " << h0 << std::endl;
-    std::cout << "A table will be output for different values of N\nPrevious runs of this data showed N ~ 1000 gave good results for spontaneous magnitization, so this will run from N = " << min_N << " to " << max_N << " in steps of " << N_step << std::endl;
+    std::cout << "A table will be output for different values of N\nPrevious runs of this data showed N ~ 1000 gave good results for spontaneous magnitization, so this will run from N = " << min_N << " to " << max_N << " in steps of " << N_step << std::endl << std::endl;
     finding_N_better(T, J, h0, min_N, max_N, N_step);
-    std::cout << std::endl << "\nUsing N = " << N << ", now a table with different values of h varrying from h = " << h_min << " to " << h_max << " in steps of " << h_step << std::endl;
+    std::cout << std::endl << std::endl << "Larger values of N give tighter results to the analytical solution of " << 0.59491 << std::endl;
+    std::cout << std::endl << "Using N = " << N << ", now a table with different values of h varrying from h = " << h_min << " to " << h_max << " in steps of " << h_step;
     h_values(N, T, J, h_min, h_max, h_step);
 
 }
@@ -61,6 +63,7 @@ void Problem2() {
 
 
 int main() {
+    std::cout << "Speakman Homework 4\nThis script will output three csv files that are used in the python script to generate the graphs" << std::endl;
     Problem1();
     Problem2();
 
